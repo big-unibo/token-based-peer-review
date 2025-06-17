@@ -52,3 +52,13 @@ The simulator provides the following parameters:
 - *Enable max n. of yearly reviews per author*: if enabled, reviewers refuse any invitation if they have done *enough* reviews in the previous 365 days.
     - Default: yes. 
     - If enabled, the maximum number of yearly reviews per reviewer varies from 4 to 34; the distribution of this value to the researchers is made in a way to ensure that the yearly demand for reviews is met (considering the default number of researchers with the default probability of paper generation), ensuring the continuity of the system.
+
+**IMPORTANT**: if a parameter is changed, the user must click the Reset button first and then re-launch the simulation for the new parameter value to be considered.
+
+## Simulation process
+
+-- Describe the basics of the process --
+
+## Logs and charts
+
+-- CSV, log, charts --
