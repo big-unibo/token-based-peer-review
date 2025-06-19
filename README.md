@@ -6,6 +6,13 @@ This repository contains a simulator for a token-based peer-review system for sc
 
 The simulator is a Python program based on [Mesa](https://mesa.readthedocs.io/latest/) and [Solara](https://solara.dev/).
 
+## Data sources
+
+All statistics are retrieved from the following sources:
+- The [DBLP computer science bibliography](https://dblp.uni-trier.de/db/), which provides its dataset in XML format at [this link](https://dblp.uni-trier.de/xml/).
+- The [Scimago Journal & Country Rank](https://www.scimagojr.com/) website, considering in particular the journals under the [Computer Science area](https://www.scimagojr.com/journalrank.php?area=1700).
+- The official websites of more than 700 journals, among those listed by Scimago in the reference above.
+
 ## Quick start
 
 Python 3.12 or higher is recommended. 
@@ -22,7 +29,7 @@ To launch the simulator:
 solara run app.py
 ```
 
-This will launch a web application at [localhost:8765]().
+This will launch a web application at <localhost:8765>.
 
 ## Parameters
 
@@ -57,8 +64,40 @@ The simulator provides the following parameters:
 
 ## Simulation process
 
--- Describe the basics of the process --
+The iterations of the simulation correspond to days. Also, the simulator assumes the existence of a single Publisher Management System (PMS).
+
+Each researcher is associated with a **status**, that determines the probability to accept a review invitation (see parameters above):
+- *Eager* if the researcher needs the assignment of new reviews to earn the tokens needed to submit one or more papers.
+- *Lazy* if otherwise.
+
+When a review is assigned, the reviewing time is randomly picked based on the histogram of reviewing times declared by the journals' websites that we crawled. This reviewing time can be updated if the reviewer becomes eager for tokens.
+
+Every day, the following operations are carried out.
+- For every researcher
+    - **Generate papers to submit**
+        - Randomly determine whether the author is ready to submit a paper (based on the *Daily paper generation probability*); in such a case, the number of reviewers required (based on the *Probability of 2 (instead of 3) reviews*) is randomly picked and the paper is added to the researcher's queue of papers to submit.
+    - **Submit reviews (and earn tokens, if enabled)**
+        - If the researcher has papers to review scheduled for the current day, the review is submitted and a token is collected (if tokens are enabled)
+    - **Submit papers (and spend tokens, if enabled)**
+        - If the researcher has papers to submit, he/she submits them based on the availability of tokens (if tokens are enabled)
+    - **Update status (if tokens are enabled)**
+        - If more tokens are needed, the researchers anticipates the reviewing time of the assigned reviews that will grant the necessary tokens
+        - If more reviews are needed to earn the necessary token, the reviewer becomes *eager*; otherwise he/she remains (or goes back to being) *lazy*
+    
+- For the PMS
+    - **Invite reviewers for submitted papers**
+        - Each paper is handled 4 days after its submission
+        - For every review needed by the paper, *n* reviewers are randomly invited, where *n* is the *N. of daily invites per needed review*
+        - The probability of the reviewer accepting the invite depends on his/her status and his/her number of reviews already accepted in the last 365 days
+        - If the review is accepted by an *eager* reviewer, his/her status is possibly set back to *lazy* if this token fullfils his/her need for tokens
+
 
 ## Logs and charts
 
--- CSV, log, charts --
+The simulator automatically creates a txt file with logging information (most of which have been commented in the code) and a CSV file with the statistics shown in the web interface.
+
+## Contacts
+
+We are [Matteo Francia](https://www.unibo.it/sitoweb/m.francia/en), [Enrico Gallinucci](https://www.unibo.it/sitoweb/enrico.gallinucci/en), and [Matteo Golfarelli](https://www.unibo.it/sitoweb/matteo.golfarelli/en), from the [Business Intelligence Group](https://big.csr.unibo.it/) of the University of Bologna, Italy.
+
+For any comments/issues with the code, please contact <enrico.gallinucci@unibo.it>.
