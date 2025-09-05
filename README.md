@@ -36,7 +36,7 @@ This will launch a web application at <localhost:8765>.
 The simulator provides the following parameters:
 
 - *Number of researchers*: the number of agents in the simulation, which will act as authors and reviewers.
-    - Default: 135978. 
+    - Default: 135972. 
     - This is based on DBLP statistics and corresponds to the number of active authors in 2024, divided by the average number of authors per paper; thus, each agent corresponds to a group of researchers.
 - *Initial tokens per researcher*: the number of tokens assigned to each agent when the token-based mechanism is activated.
     - Default: 3. 
